@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trabalho ED3 - Etapa 2</title>
+    </head>
+    <body>
+        <form action="index.php" method="post" id="formulario">
+            <label for="opcao">Informe o tipo de busca: </label>
+            <br>
+            <select name="opcao" id="opcao">
+                <option value="0">Buscar por um log dentro de um único mês</option>
+                <option value="1">Buscar por um log em todos os meses</option>
+            </select>
+
+            <br><br>
+            <label for="log">Informe o número do log: </label>
+            <br>
+            <input type="number" name="log" id="log" required>
+
+            <div id="containerInputMes">
+                <div id="remover">
+                    <br>
+                    <label for="mes">Informe o mês para a busca: </label>
+                    <br>
+                    <select name="mes" id="mes" required>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+            </div>
+            <br><br>
+            <button type="submit" id="btnBusca">Buscar</button>
+        </form>
+        <p id="result"></p>
+    </body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    if (document.getElementById("btnBusca") && document.getElementById("formulario")) {
+        $("#formulario").submit(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            let form = $("#formulario");
+            let caminho = form.attr("action");
+            let log = 0;
+            let mes = 0;
+
+            if (document.getElementById("log")) {
+                log = $("#log").val();
+            }
+            if (document.getElementById("mes")) {
+                mes = $("#mes").val();
+            }
+
+            $('#btnBusca').prop("disabled", true);
+            $.post(
+                    caminho, {
+                    teste : $("#teste").val(),
+                    log : log,
+                    mes : mes
+                }, function (res) {
+                    $("#result").html(res);
+                    $('#btnBusca').prop("disabled", false);
+                }
+            );
+
+        });
+    }
+
+    if (document.getElementById("opcao")) {
+        $("#opcao").change(function () {
+            if ($(this).val() == 0) {
+                $("#containerInputMes").html(`
+                    <div id="remover">
+                        <br>
+                        <label for="mes">Informe o mês para a busca: </label>
+                        <br>
+                        <select name="mes" id="mes" required>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                `);
+            } else {
+                $("#remover").remove();
+            }
+        });
+    }
+</script>
